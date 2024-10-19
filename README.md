@@ -1,4 +1,5 @@
 
+# Author: Dr. Charles Lively III
 # Docker and gem5 Simulator Setup Guide
 
 This repository provides a comprehensive guide to install Docker and run the gem5 simulator within a Docker container.
