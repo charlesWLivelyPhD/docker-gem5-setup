@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install Docker & gem5 Tutorial</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background-color: #fff;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .step {
+            background-color: #e8e8e8;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 5px solid #333;
+        }
+        .code {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: "Courier New", Courier, monospace;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .note {
+            background-color: #fffae6;
+            border-left: 5px solid #f0c674;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>How to Install Docker & Set Up gem5 Simulator</h1>
+        <p>A step-by-step guide for beginners</p>
+    </header>
+    
+    <div class="container">
+        <h2>Introduction</h2>
+        <p>This guide will teach you how to install Docker and set up the gem5 simulator within a Docker container. 
+        It is designed for complete beginners and includes detailed steps and images to make the process easy to follow.</p>
+        
+        <h2>Prerequisites</h2>
+        <p>No prior knowledge of Docker or gem5 is required. Ensure that your computer has at least 4GB of RAM and enough storage for Docker images.</p>
+
+        <div class="step">
+            <h3>Step 1: Installing Docker</h3>
+            <h4>Windows</h4>
+            <ol>
+                <li>
+                    <p>Download Docker Desktop from <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker's official site</a>.</p>
+                    <img src="path/to/windows-download.jpg" alt="Docker Desktop download page for Windows">
+                </li>
+                <li>
+                    <p>Run the installer and select "Use WSL 2". Follow the installation instructions, then restart your computer if prompted.</p>
+                    <img src="path/to/windows-setup.jpg" alt="Docker Desktop installation on Windows">
+                </li>
+                <li>
+                    <p>Open Docker Desktop and wait for it to start. To verify installation, open Command Prompt and run:</p>
+                    <div class="code">docker --version</div>
+                </li>
+            </ol>
+
+            <h4>macOS</h4>
+            <ol>
+                <li>
+                    <p>Download Docker Desktop from <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker's official site</a>.</p>
+                    <img src="path/to/mac-download.jpg" alt="Docker Desktop download page for macOS">
+                </li>
+                <li>
+                    <p>Drag the Docker icon to the Applications folder, then launch Docker from Applications.</p>
+                    <img src="path/to/mac-setup.jpg" alt="Docker Desktop setup on macOS">
+                </li>
+                <li>
+                    <p>Open Terminal and verify installation by running:</p>
+                    <div class="code">docker --version</div>
+                </li>
+            </ol>
+
+            <h4>Ubuntu</h4>
+            <ol>
+                <li>
+                    <p>Update system packages by running:</p>
+                    <div class="code">sudo apt update</div>
+                </li>
+                <li>
+                    <p>Install Docker with:</p>
+                    <div class="code">sudo apt install docker.io -y</div>
+                </li>
+                <li>
+                    <p>Start Docker and enable it to run at boot:</p>
+                    <div class="code">sudo systemctl start docker</div>
+                    <div class="code">sudo systemctl enable docker</div>
+                </li>
+                <li>
+                    <p>Verify installation:</p>
+                    <div class="code">docker --version</div>
+                </li>
+                <li>
+                    <p>Add your user to the Docker group to use Docker without 'sudo':</p>
+                    <div class="code">sudo usermod -aG docker $USER</div>
+                </li>
+                <li>
+                    <p>Log out and back in for changes to take effect.</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Setting Up gem5 in Docker</h3>
+            <ol>
+                <li>
+                    <p>Create a directory for gem5 on your host machine:</p>
+                    <div class="code">mkdir ~/gem5</div>
+                </li>
+                <li>
+                    <p>Pull and run the gem5 Docker image with:</p>
+                    <div class="code">docker run -tid --hostname=gem5_dev --name=gem5_container -v ~/gem5:/root ghcr.io/gem5/ubuntu-24.04_all-dependencies:v24-0 /bin/bash</div>
+                    <img src="path/to/gem5-docker.jpg" alt="Running gem5 Docker image">
+                </li>
+                <li>
+                    <p>Access the Docker container:</p>
+                    <div class="code">docker exec -ti gem5_container /bin/bash</div>
+                    <img src="path/to/access-container.jpg" alt="Accessing gem5 container">
+                </li>
+                <li>
+                    <p>Clone and build gem5 inside the container:</p>
+                    <div class="code">
+                        git clone https://github.com/gem5/gem5.git<br>
+                        cd gem5<br>
+                        scons build/X86/gem5.opt -j8
+                    </div>
+                </li>
+                <li>
+                    <p>Run a basic gem5 simulation to verify the setup:</p>
+                    <div class="code">build/X86/gem5.opt configs/learning_gem5/part1/simple.py</div>
+                    <img src="path/to/gem5-run.jpg" alt="Running gem5 simulation">
+                </li>
+            </ol>
+        </div>
+
+        <div class="note">
+            <strong>Note:</strong> Building gem5 may take some time, depending on your computer's performance.
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>You have successfully installed Docker, set up a containerized environment, and configured gem5 within Docker. This setup provides a consistent and isolated environment for exploring gem5 simulations.</p>
+    </div>
+</body>
+</html>
